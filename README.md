@@ -2,10 +2,10 @@
 ## Real-Time Activity Recognition for the OpenExo Hip Exoskeleton
 An embedded machine learning project that uses a wearable inertial measurement unit (IMU) to classify human activities and display live predictions in the OpenExo graphical user interface (GUI).
 
-Project Overview
+# Project Overview
 This research project explores activity recognition as a step toward context-aware assistance for a hip exoskeleton. An Arduino Nano 33 BLE Sense Rev2 collects IMU measurements, extracts features from short windows, and runs a Random Forest classifier directly on the microcontroller. Predicted activities are transmitted over USB serial and displayed in a PySide6 window integrated with the OpenExo GUI.
 
-Current scope: Real-time activity classification and visualization. Predictions are not used to command the exoskeleton motors or change assistance settings.
+# Current scope: Real-time activity classification and visualization. Predictions are not used to command the exoskeleton motors or change assistance settings.
 
 Recognized Activities
 Sitting
@@ -15,7 +15,7 @@ Stairs up
 Stairs down
 Live validation of the complete five-activity system is ongoing.
 
-Hardware and Software
+# Hardware and Software
 Hardware
 
 Arduino Nano 33 BLE Sense Rev2
@@ -49,12 +49,12 @@ Activity label + tree-vote share
 USB serial (230400 baud)
           |
           v
-OpenExo Machine Learning window
+# OpenExo Machine Learning window
 The sensor channels are ax, ay, az, gx, gy, gz, mx, my, and mz. The accelerometer and gyroscope operate at approximately 100 Hz, while the magnetometer updates at approximately 10 Hz; the latest magnetometer values are reused between updates.
 
 The model uses 27 features: mean, standard deviation, and root mean square (RMS) for each of the nine axes. The displayed confidence value represents the Random Forest's tree-vote share, not a calibrated probability.
 
-Current Implementation
+# Current Implementation
 Collected labeled trials for five activities
 Trained a Random Forest classifier in Python
 Converted the trained classifier for embedded Arduino inference
@@ -100,12 +100,12 @@ random_forest_predict.h	Embedded prediction logic
 imu_feature_extraction.h	On-device feature extraction
 File paths for the Arduino sketch and headers depend on how the firmware folder is organized in the repository.
 
-Validation Status
+# Validation Status
 The embedded classifier and live GUI have been demonstrated for basic activity changes. Structured live testing of sitting, standing, and walking is the next validation step; stair ascent and descent will be tested afterward.
 
 Earlier offline evaluation results should not be treated as the accuracy of the current 0.5-second embedded model without evaluating that exact model and configuration.
 
-Next Steps
+# Next Steps
 Record structured live results for sitting, standing, and walking
 Test stair ascent and descent in realistic conditions
 Investigate prediction instability during activity transitions
