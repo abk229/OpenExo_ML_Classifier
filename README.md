@@ -1,5 +1,5 @@
 
-#Real-Time Activity Recognition for the OpenExo Hip Exoskeleton
+## Real-Time Activity Recognition for the OpenExo Hip Exoskeleton
 An embedded machine learning project that uses a wearable inertial measurement unit (IMU) to classify human activities and display live predictions in the OpenExo graphical user interface (GUI).
 
 Project Overview
