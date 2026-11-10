@@ -1,0 +1,26 @@
+trial,state,file,samples,bad_rows,timestamp_resets,duration_s,median_hz,bad_examples
+sitting1,sitting,sitting1.txt,1622,1,0,30.52,53.58,"[(1624, 'field count', '')]"
+sitting2,sitting,sitting2.txt,1669,1,0,31.01,54.26,"[(1671, 'field count', '')]"
+sitting3,sitting,sitting3.txt,1674,0,0,31.06,54.34,[]
+sitting4,sitting,sitting4.txt,1663,0,0,30.93,54.24,[]
+sitting5,sitting,sitting5.txt,1668,0,0,31.0,54.23,[]
+standing1,standing,standing1.txt,1629,0,0,30.61,53.71,[]
+standing2,standing,standing2.txt,1637,0,0,30.97,53.34,[]
+standing3,standing,standing3.txt,1625,1,0,30.76,53.26,"[(1627, 'field count', '')]"
+standing4,standing,standing4.txt,1616,0,0,30.63,53.22,[]
+standing5,standing,standing5.txt,1633,1,0,31.01,53.08,"[(1635, 'field count', '')]"
+walking1,walking,walking1.txt,1621,0,0,30.65,53.29,[]
+walking2,walking,walking2.txt,1639,1,0,30.91,53.45,"[(1641, 'field count', '')]"
+walking3,walking,walking3.txt,1631,0,0,30.84,53.3,[]
+walking4,walking,walking4.txt,1623,0,0,30.6,53.44,[]
+walking5,walking,walking5.txt,1628,1,0,30.68,53.5,"[(1630, 'field count', '')]"
+stairs_up1,stairs_up,stairs_up1.txt,1598,1,0,30.1,53.5,"[(1600, 'field count', '')]"
+stairs_up2,stairs_up,stairs_up2.txt,1650,1,0,30.98,53.75,"[(1652, 'field count', '')]"
+stairs_up3,stairs_up,stairs_up3.txt,1620,0,0,30.51,53.53,[]
+stairs_up4,stairs_up,stairs_up4.txt,1645,0,0,31.0,53.49,[]
+stairs_up5,stairs_up,stairs_up5.txt,1646,2,0,31.06,53.48,"[(1648, 'field count', ''), (1649, 'field count', '')]"
+stairs_down1,stairs_down,stairs_down1.txt,1626,0,0,30.49,53.88,[]
+stairs_down2,stairs_down,stairs_down2.txt,1631,0,0,30.7,53.65,[]
+stairs_down3,stairs_down,stairs_down3.txt,1644,0,0,30.97,53.67,[]
+stairs_down4,stairs_down,stairs_down4.txt,1644,0,0,31.07,53.39,[]
+stairs_down5,stairs_down,stairs_down5.txt,1652,1,0,31.05,53.75,"[(1654, 'field count', '')]"
