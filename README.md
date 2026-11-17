@@ -1,107 +1,176 @@
+# Real-Time Activity Recognition for the OpenExo Hip Exoskeleton
 
-## Real-Time Activity Recognition for the OpenExo Hip Exoskeleton
-An embedded machine learning project that uses a wearable inertial measurement unit (IMU) to classify human activities and display live predictions in the OpenExo graphical user interface (GUI).
+An embedded machine learning project that uses a wearable inertial measurement unit (IMU) to classify human activities and display live predictions in a Python graphical user interface (GUI).
 
-# Project Overview
-This research project explores activity recognition as a step toward context-aware assistance for a hip exoskeleton. An Arduino Nano 33 BLE Sense Rev2 collects IMU measurements, extracts features from short windows, and runs a Random Forest classifier directly on the microcontroller. Predicted activities are transmitted over USB serial and displayed in a PySide6 window integrated with the OpenExo GUI.
+## Project Overview
 
-# Current scope: 
-Real-time activity classification and visualization. Predictions are not used to command the exoskeleton motors or change assistance settings.
+This research project explores activity recognition as a step toward context-aware assistance for a hip exoskeleton. An Arduino Nano 33 BLE Sense Rev2 collects IMU measurements, extracts statistical features from short windows, and runs a trained Random Forest classifier directly on the microcontroller.
 
-Recognized Activities:
-Sitting, 
-Standing, 
-Walking, 
-Stairs up, 
-Stairs down. 
+The predicted activity and Random Forest tree-vote share are transmitted to a Python GUI using Bluetooth Low Energy (BLE). The GUI displays predictions in real time and allows labeled results to be recorded for evaluation.
 
-Live validation of the complete five-activity system is ongoing.
+**Scope:** The system recognizes and visualizes activities. Predictions do not control exoskeleton motors or adjust assistance settings.
 
-# Hardware and Software
-Hardware
+## Recognized Activities
 
-Arduino Nano 33 BLE Sense Rev2
-BMI270 accelerometer and gyroscope
-BMM150 magnetometer
-USB connection to a computer running the OpenExo GUI
-Software
+- Sitting
+- Standing
+- Walking
+- Stairs up
+- Stairs down
 
-Arduino / C++ for IMU acquisition, feature extraction, and embedded inference
-Python for data processing, model development, and testing
-scikit-learn Random Forest for model training
-PySide6 for the GUI
-pyserial for communication with the Arduino
+All five activities were included in offline evaluation. Live testing has focused on sitting, standing, walking, and transitions. Stair ascent and descent have not yet been fully validated live.
 
-Machine Learning Pipeline: 
-9-axis IMU measurements --> 0.5-second sensor windows --> 27 statistical features
-(mean, standard deviation, RMS for each axis) --> Embedded Random Forest classifier --> Activity label + tree-vote share --> USB serial (230400 baud) -->
+## Hardware and Software
 
-# OpenExo Machine Learning window
-The sensor channels are ax, ay, az, gx, gy, gz, mx, my, and mz. The accelerometer and gyroscope operate at approximately 100 Hz, while the magnetometer updates at approximately 10 Hz; the latest magnetometer values are reused between updates.
+### Hardware
 
-The model uses 27 features: mean, standard deviation, and root mean square (RMS) for each of the nine axes. The displayed confidence value represents the Random Forest's tree-vote share, not a calibrated probability.
+- Arduino Nano 33 BLE Sense Rev2
+- BMI270 accelerometer and gyroscope
+- BMM150 magnetometer
+- Computer with Bluetooth Low Energy support
+- USB connection for programming and powering the Arduino
 
-# Current Implementation
-Collected labeled trials for five activities
-Trained a Random Forest classifier in Python
-Converted the trained classifier for embedded Arduino inference
-Verified agreement between Python and Arduino predictions on comparison tests
-Implemented serial transmission of live predictions
-Created a PySide6 activity recognition window
-Added a Machine Learning Demo button to the OpenExo startup screen, allowing demonstration without a connected exoskeleton
-Running the Live GUI Demo
-These instructions assume the OpenExo Python GUI and Arduino firmware have already been set up.
+### Software
 
-- Upload the activity recognition firmware to the Arduino Nano 33 BLE Sense Rev2.
+- Arduino / C++ for IMU acquisition, feature extraction, and embedded classification
+- Python and scikit-learn for model development and evaluation
+- PySide6 for the activity recognition GUI
+- bleak for BLE communication
+- pandas, NumPy, and Matplotlib for analysis and visualization
 
-- Connect the Arduino to the computer via USB.
+## Data Collection
 
-- Close the Arduino Serial Monitor and any other programs using the serial port.
+The Arduino records timestamped, nine-axis IMU measurements:
 
-- Install the required Python packages in the environment used by the OpenExo GUI:
+`ax, ay, az, gx, gy, gz, mx, my, mz`
 
-- python -m pip install PySide6 pyserial
+The accelerometer and gyroscope have native output rates of approximately 100 Hz; the magnetometer updates at approximately 10 Hz. The latest magnetometer reading is reused between updates. Actual recorded sample rates can be lower than the sensor's nominal rates.
 
-- From the Python_GUI directory, launch the OpenExo GUI: python3 GUI.py
+The dataset contains **15 labeled trials**, with three trials for each of the five activities. The original recordings are stored in `Trial Data/`. The data collection sketch is stored in `Arduino/`.
 
-- On Windows, python GUI.py may be used if python3 is unavailable.
+## Machine Learning Pipeline
 
-- Click Machine Learning Demo on the startup screen.
+```text
+9-axis IMU measurements
+         |
+         v
+0.5-second windows (final embedded implementation)
+         |
+         v
+27 statistical features
+(mean, standard deviation, RMS for each axis)
+         |
+         v
+Embedded Random Forest classifier (200 trees)
+         |
+         v
+Predicted activity + tree-vote share
+         |
+         v
+Bluetooth Low Energy notifications
+         |
+         v
+Python activity recognition GUI + optional CSV logging
+```
 
-- Observe the predicted activity and Random Forest tree-vote share update live.
+The displayed tree-vote share is the proportion of trees voting for the predicted class, **not** a calibrated probability.
 
-Serial configuration: The current implementation uses COM3 and 230400 baud. Change the port in services/ArduinoActivityReader.py if the Arduino appears on a different port.
+## Model Training and Evaluation
 
-Relevant Project Files
-The current implementation includes the following files or components:
+IMU recordings were processed in Python to extract window-level statistical features and train a Random Forest classifier. Trial-based cross-validation was used to evaluate performance on held-out recordings.
 
-File or component	Purpose
-Python_GUI/GUI.py	OpenExo GUI entry point
-Python_GUI/MainWindow.py	Main application window and Machine Learning window launch
-Python_GUI/pages/ScanPage.py	Startup screen and Machine Learning Demo button
-Python_GUI/pages/MachineLearningWindow.py	Live activity prediction display
-Python_GUI/services/ArduinoActivityReader.py	Background serial reader using a Qt thread
-OpenExo_RF_Test.ino	Arduino activity recognition sketch
-random_forest_compact.h	Compact embedded Random Forest model
-random_forest_predict.h	Embedded prediction logic
-imu_feature_extraction.h	On-device feature extraction
-File paths for the Arduino sketch and headers depend on how the firmware folder is organized in the repository.
+An earlier five-activity offline leave-one-trial-out evaluation achieved **92.36% overall accuracy**. This result describes that offline evaluation and should not be interpreted as the accuracy of the final embedded 0.5-second model without evaluating that exact configuration.
 
-# Validation Status
-The embedded classifier and live GUI have been demonstrated for basic activity changes. Structured live testing of sitting, standing, and walking is the next validation step; stair ascent and descent will be tested afterward.
+The trained model was converted into a compact C++ representation for execution on the Arduino.
 
-Earlier offline evaluation results should not be treated as the accuracy of the current 0.5-second embedded model without evaluating that exact model and configuration.
+## Real-Time Arduino Implementation
 
-# Next Steps
-Record structured live results for sitting, standing, and walking
-Test stair ascent and descent in realistic conditions
-Investigate prediction instability during activity transitions
-Document final live validation results
-Prepare the final research demonstration
-Acknowledgments
+The final Arduino firmware performs feature extraction and classification onboard, then broadcasts the predicted activity and tree-vote share using BLE notifications.
+
+- **BLE device name:** `OpenExo-IMU`
+- **Activity characteristic UUID:** `12345678-1234-1234-1234-1234567890ac`
+- **Example notification:** `sitting,0.7050`
+
+The Python GUI receives predictions; it does not run the Random Forest inference.
+
+## Python Activity Recognition GUI
+
+The standalone PySide6 GUI provides:
+
+- Live predicted activity and Random Forest tree-vote share
+- Connect and Disconnect controls for the Arduino BLE connection
+- A ground-truth activity dropdown for labeled testing
+- Automatic CSV logging
+
+CSV recordings contain the columns:
+
+`timestamp, actual_activity, predicted_activity, vote_share`
+
+The GUI writes recordings to `Python_GUI/imu_results/`. Generated recordings need not all be committed to the repository; representative test results can be kept in `Results/`.
+
+## Running the Live GUI
+
+1. Open the final Arduino classifier sketch in the Arduino IDE, install the required Arduino libraries (`Arduino_BMI270_BMM150` and `ArduinoBLE`), and upload the firmware to the Arduino Nano 33 BLE Sense Rev2.
+2. Power the Arduino and ensure BLE is available on the computer.
+3. From the repository root, install the Python dependencies:
+
+   ```bash
+   python -m pip install -r requirements.txt
+   ```
+
+4. Launch the standalone GUI using the command that matches your working Python path configuration. For example, from the `Python_GUI` directory, if its package imports are configured:
+
+   ```bash
+   python pages/MachineLearningWindow.py
+   ```
+
+   **Note:** `MachineLearningWindow.py` imports `services.ArduinoBLEReader`. The `Python_GUI` directory must be on Python's module search path. If the command above fails with `ModuleNotFoundError`, use the launch method already verified in your local setup and document that exact command here.
+
+5. Click **Connect** and wait for **Connected via BLE**.
+6. Observe live predictions. For labeled testing, select the actual activity in the dropdown.
+7. Click **Disconnect** when finished.
+
+## Validation Results
+
+Preliminary live testing of the Arduino and BLE GUI produced the following results:
+
+| Activity | Correct predictions | Accuracy |
+|---|---:|---:|
+| Sitting | 25 / 25 | 100% |
+| Standing | 44 / 44 | 100% |
+| Walking | 41 / 45 | 91.1% |
+
+A separate transition test produced **92 correct predictions out of 101 (approximately 91.1%)**. Some errors occurred near changes between activities.
+
+These are limited preliminary tests, not comprehensive estimates across participants, environments, or sensor placements. Stair ascent and descent still require live validation.
+
+## Repository Organization
+
+| Folder | Contents |
+|---|---|
+| `Arduino/` | IMU data collection and embedded Random Forest classifier |
+| `IMU_Analysis/` | Supporting analysis files |
+| `Models/` | Saved trained models |
+| `Notebooks/` | Data processing, model training, and visualization notebooks |
+| `Python_GUI/` | Standalone BLE activity recognition GUI |
+| `Results/` | Experimental results and evaluations |
+| `Serial Classification/` | Earlier serial-based classification experiments |
+| `Trial Data/` | Original labeled IMU recordings |
+
+## Limitations and Future Work
+
+- The dataset contains a limited number of repeated trials.
+- Generalization across participants and sensor placements has not been extensively tested.
+- Activity transitions can produce classification errors.
+- Stair ascent and descent require additional live validation.
+- The classifier does not currently control exoskeleton assistance.
+
+Future work may include collecting more diverse training data, improving transition handling, and investigating how recognized activities could inform context-aware assistance.
+
+## Acknowledgments
+
 Developed as a research project involving the OpenExo hip exoskeleton platform.
 
-License
-Refer to the repository's license and the applicable OpenExo project licensing terms. No license is implied by this README.
+## License
 
-114
+This repository is distributed under the MIT License; see `LICENSE`. Third-party OpenExo components remain subject to their respective licenses.
