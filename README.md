@@ -5,7 +5,8 @@ An embedded machine learning project that uses a wearable inertial measurement u
 # Project Overview
 This research project explores activity recognition as a step toward context-aware assistance for a hip exoskeleton. An Arduino Nano 33 BLE Sense Rev2 collects IMU measurements, extracts features from short windows, and runs a Random Forest classifier directly on the microcontroller. Predicted activities are transmitted over USB serial and displayed in a PySide6 window integrated with the OpenExo GUI.
 
-# Current scope: Real-time activity classification and visualization. Predictions are not used to command the exoskeleton motors or change assistance settings.
+# Current scope: 
+Real-time activity classification and visualization. Predictions are not used to command the exoskeleton motors or change assistance settings.
 
 Recognized Activities:
 Sitting, 
@@ -13,6 +14,7 @@ Standing,
 Walking, 
 Stairs up, 
 Stairs down. 
+
 Live validation of the complete five-activity system is ongoing.
 
 # Hardware and Software
@@ -29,26 +31,11 @@ Python for data processing, model development, and testing
 scikit-learn Random Forest for model training
 PySide6 for the GUI
 pyserial for communication with the Arduino
-Machine Learning Pipeline
-9-axis IMU measurements
-          |
-          v
-0.5-second sensor windows
-          |
-          v
-27 statistical features
-(mean, standard deviation, RMS for each axis)
-          |
-          v
-Embedded Random Forest classifier
-          |
-          v
-Activity label + tree-vote share
-          |
-          v
-USB serial (230400 baud)
-          |
-          v
+
+Machine Learning Pipeline: 
+9-axis IMU measurements --> 0.5-second sensor windows --> 27 statistical features
+(mean, standard deviation, RMS for each axis) --> Embedded Random Forest classifier --> Activity label + tree-vote share --> USB serial (230400 baud) -->
+
 # OpenExo Machine Learning window
 The sensor channels are ax, ay, az, gx, gy, gz, mx, my, and mz. The accelerometer and gyroscope operate at approximately 100 Hz, while the magnetometer updates at approximately 10 Hz; the latest magnetometer values are reused between updates.
 
@@ -65,23 +52,23 @@ Added a Machine Learning Demo button to the OpenExo startup screen, allowing dem
 Running the Live GUI Demo
 These instructions assume the OpenExo Python GUI and Arduino firmware have already been set up.
 
-Upload the activity recognition firmware to the Arduino Nano 33 BLE Sense Rev2.
+- Upload the activity recognition firmware to the Arduino Nano 33 BLE Sense Rev2.
 
-Connect the Arduino to the computer via USB.
+- Connect the Arduino to the computer via USB.
 
-Close the Arduino Serial Monitor and any other programs using the serial port.
+- Close the Arduino Serial Monitor and any other programs using the serial port.
 
-Install the required Python packages in the environment used by the OpenExo GUI:
+- Install the required Python packages in the environment used by the OpenExo GUI:
 
-python -m pip install PySide6 pyserial
-From the Python_GUI directory, launch the OpenExo GUI:
+- python -m pip install PySide6 pyserial
 
-python3 GUI.py
-On Windows, python GUI.py may be used if python3 is unavailable.
+- From the Python_GUI directory, launch the OpenExo GUI: python3 GUI.py
 
-Click Machine Learning Demo on the startup screen.
+- On Windows, python GUI.py may be used if python3 is unavailable.
 
-Observe the predicted activity and Random Forest tree-vote share update live.
+- Click Machine Learning Demo on the startup screen.
+
+- Observe the predicted activity and Random Forest tree-vote share update live.
 
 Serial configuration: The current implementation uses COM3 and 230400 baud. Change the port in services/ArduinoActivityReader.py if the Arduino appears on a different port.
 
