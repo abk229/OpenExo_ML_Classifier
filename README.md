@@ -7,12 +7,12 @@ This research project explores activity recognition as a step toward context-awa
 
 # Current scope: Real-time activity classification and visualization. Predictions are not used to command the exoskeleton motors or change assistance settings.
 
-Recognized Activities
-Sitting
-Standing
-Walking
-Stairs up
-Stairs down
+Recognized Activities:
+Sitting, 
+Standing, 
+Walking, 
+Stairs up, 
+Stairs down, 
 Live validation of the complete five-activity system is ongoing.
 
 # Hardware and Software
