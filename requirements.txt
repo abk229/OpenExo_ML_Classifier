@@ -1,0 +1,10 @@
+
+PySide6
+bleak
+numpy
+pandas
+scikit-learn
+joblib
+matplotlib
+seaborn
+pyserial
