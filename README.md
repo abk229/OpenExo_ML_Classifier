@@ -46,7 +46,7 @@ The Arduino records timestamped, nine-axis IMU measurements:
 
 The accelerometer and gyroscope have native output rates of approximately 100 Hz; the magnetometer updates at approximately 10 Hz. The latest magnetometer reading is reused between updates. Actual recorded sample rates can be lower than the sensor's nominal rates.
 
-The dataset contains **15 labeled trials**, with three trials for each of the five activities. The original recordings are stored in `Trial Data/`. The data collection sketch is stored in `Arduino/`.
+The dataset contains **25 labeled trials**, with five trials for each of the five activities. The original recordings are stored in `Trial Data/`. The data collection sketch is stored in `Arduino/`.
 
 ## Machine Learning Pipeline
 
