@@ -2,6 +2,9 @@
 
 An embedded machine learning project that uses a wearable inertial measurement unit (IMU) to classify human activities and display live predictions in a Python graphical user interface (GUI).
 
+<img width="597" height="497" alt="image" src="https://github.com/user-attachments/assets/d6b2f244-93b5-4a0d-8a26-845f47b9b07e" />
+
+
 ## Project Overview
 
 This research project explores activity recognition as a step toward context-aware assistance for a hip exoskeleton. An Arduino Nano 33 BLE Sense Rev2 collects IMU measurements, extracts statistical features from short windows, and runs a trained Random Forest classifier directly on the microcontroller.
