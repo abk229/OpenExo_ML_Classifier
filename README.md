@@ -12,7 +12,7 @@ Sitting,
 Standing, 
 Walking, 
 Stairs up, 
-Stairs down, 
+Stairs down. 
 Live validation of the complete five-activity system is ongoing.
 
 # Hardware and Software
